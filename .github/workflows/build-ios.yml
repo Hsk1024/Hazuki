@@ -22,7 +22,7 @@ jobs:
       # 无证书编译 iOS Runner.app 产物
       - name: Build Flutter iOS (No Codesign)
         run: |
-          flutter build ios --release --no-codesign
+          flutter build ios --release --no-codesign --verbose
 
       # 将生成的 Runner.app 打包为标准的 Payload 结构并压缩成 .ipa
       - name: Package to IPA
