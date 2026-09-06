@@ -6,6 +6,7 @@
 #import "./include/device_info_plus/DeviceIdentifiers.h"
 #import <mach/mach.h>
 #import <sys/utsname.h>
+#import <objc/message.h>
 
 @implementation FPPDeviceInfoPlusPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar> *)registrar {
@@ -31,8 +32,14 @@
       isiOSAppOnMac = [NSNumber numberWithBool:[info isiOSAppOnMac]];
     }
     NSNumber *isiOSAppOnVision = [NSNumber numberWithBool:NO];
-    if (@available(iOS 26.1, *)) {
-      isiOSAppOnVision = [NSNumber numberWithBool:[info isiOSAppOnVision]];
+    // isiOSAppOnVision 仅存在于 iOS 26.1+ SDK；旧版 Xcode 编译时无此声明，
+    // 因此改用 NSSelectorFromString + objc_msgSend 在运行时探测，兼容旧 SDK。
+    SEL isiOSAppOnVisionSelector = NSSelectorFromString(@"isiOSAppOnVision");
+    if (@available(iOS 26.1, *) &&
+        [info respondsToSelector:isiOSAppOnVisionSelector]) {
+      isiOSAppOnVision = [NSNumber
+          numberWithBool:((BOOL (*)(id, SEL))objc_msgSend)(
+                             info, isiOSAppOnVisionSelector)];
     }
     NSError *error = nil;
     NSDictionary *fsAttributes = [[NSFileManager defaultManager] attributesOfFileSystemForPath:NSHomeDirectory() error:&error];
