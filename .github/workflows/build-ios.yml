@@ -8,7 +8,7 @@ jobs:
     runs-on: macos-14 # 使用最新的 macOS runner (Apple Silicon)
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -33,7 +33,7 @@ jobs:
 
       # 上传生成的 IPA 文件供下载
       - name: Upload IPA Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: Hazuki-unsigned-ipa
           path: Hazuki-unsigned.ipa
