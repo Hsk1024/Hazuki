@@ -5,7 +5,7 @@ on:
 
 jobs:
   build-ios:
-    runs-on: macos-14 # 使用最新的 macOS runner (Apple Silicon)
+    runs-on: macos-26 # Apple Silicon，自带 Xcode 26 SDK（macos-14 已弃用，缺新 SDK API）
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
